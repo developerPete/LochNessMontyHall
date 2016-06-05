@@ -1,7 +1,10 @@
 **/.idea
 **/.idea/**
-**/target
-**/target/**
+#**/target
+#**/target/**
+!/target
+/target/*
+!/target/*.jar
 
 *.class
 *.iml
@@ -10,7 +13,6 @@
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.war
 *.ear
 
