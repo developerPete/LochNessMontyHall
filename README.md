@@ -7,8 +7,9 @@ The result shows the number of wins when choosing to stay with an initial choice
 The result is returned as JSON in the format:
 {"staySuccessCount":X,"switchSuccessCount":Y,"roundsCount":X+Y}
 
-How to run the application:
+JDK 1.8.0
 
+How to run the application:
 
 Alternative 1 (if you do want to compile it yourself):
 
