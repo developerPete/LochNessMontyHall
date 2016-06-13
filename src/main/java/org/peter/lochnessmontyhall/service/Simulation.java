@@ -38,17 +38,30 @@ public class Simulation {
         SimulationResult result = new SimulationResult(numberOfRounds);
 
         for(int i=0; i<numberOfRounds; i++) {
-            Lake initialLakeChoice = lakes.get(numberGenerator.nextInt(lakes.size()));
-            Lake lakeWithMonster = lakes.get(numberGenerator.nextInt(lakes.size()));
+            Lake initialLakeChoice = chooseRandomLake(lakes);
+            Lake lakeWithMonster = chooseRandomLake(lakes);
 
-            if(!stayStrategy(initialLakeChoice, lakeWithMonster, result)) {
-                switchStrategy(initialLakeChoice, lakeWithMonster, lakes, result);
-            }
+            searchForNessieUsingStayStrategy(initialLakeChoice, lakeWithMonster, result);
+            searchForNessieUsingSwitchStrategy(initialLakeChoice, lakeWithMonster, lakes, result);
         }
         return result;
     }
 
-    private static boolean stayStrategy(Lake initialLakeChoice, Lake lakeWithMonster, SimulationResult result) {
+    private static Lake chooseRandomLake(List<Lake> lakes) {
+        return lakes.get(numberGenerator.nextInt(lakes.size()));
+    }
+
+
+    /**
+     * Returns true if initialLakeChoice equals lakeWithMonster. Else false.
+     * If true, increments the staySuccessCount of SimulationResult.
+     *
+     * @param initialLakeChoice
+     * @param lakeWithMonster
+     * @param result
+     * @return
+     */
+    private static boolean searchForNessieUsingStayStrategy(Lake initialLakeChoice, Lake lakeWithMonster, SimulationResult result) {
         if(initialLakeChoice.equals(lakeWithMonster)) {
             result.incrementStaySuccessCount();
             return true;
@@ -56,7 +69,19 @@ public class Simulation {
         return false;
     }
 
-    private static boolean switchStrategy(Lake initialLakeChoice, Lake lakeWithMonster, List<Lake> lakes, SimulationResult result) {
+    /**
+     * Returns true if a randomly chosen Lake equals lakeWithMonster. Else false.
+     * The chosen Lake will not be the initialLakeChoice.
+     * A Lake not containing the monster will have been removed from the possible choices before the choosing.
+     * If true, increments the switchSuccessCount of SimulationResult.
+     *
+     * @param initialLakeChoice
+     * @param lakeWithMonster
+     * @param lakes
+     * @param result
+     * @return
+     */
+    private static boolean searchForNessieUsingSwitchStrategy(Lake initialLakeChoice, Lake lakeWithMonster, List<Lake> lakes, SimulationResult result) {
         Lake lakeWithoutMonster = chooseOtherLake(lakes, initialLakeChoice, lakeWithMonster);
         Lake secondChoice = chooseOtherLake(lakes, initialLakeChoice, lakeWithoutMonster);
         if(secondChoice.equals(lakeWithMonster)) {
@@ -73,6 +98,6 @@ public class Simulation {
 
         Predicate<Lake> otherLakesPredicate = n -> !(n.equals(lake1) || n.equals(lake2));
         List<Lake> filteredLakes = lakes.stream().filter(otherLakesPredicate).collect(Collectors.toList());
-        return filteredLakes.get(numberGenerator.nextInt(filteredLakes.size()));
+        return chooseRandomLake(filteredLakes);
     }
 }
